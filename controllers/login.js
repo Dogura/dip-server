@@ -32,15 +32,22 @@ export const loginPhone = (req,res)=>{
     db.query(q,[req.body.username],(err,data)=>{
         console.log("data are " + JSON.stringify(data));
         if(err){
+            console.log("mysql data error");
             return (res.status(404).json("error data")  + err);
-        }
-        if (data.length === 0) return res.status(404).json("User not found!");
+        };
+        if (data.length === 0){ 
+            console.log("mysql data not found");
+            return res.status(404).json("User not found!");
+        };
         
-        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password)
-        if(!isPassCorrect) return res.status(400).json("wrong username or password!")
+        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
+        if(!isPassCorrect) {
+            console.log("inncorect password");
+            return res.status(400).json("wrong username or password!");
+        };
 
         const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
-
+        console.log("all done returning token");
         res.json({ token });
       });
 
