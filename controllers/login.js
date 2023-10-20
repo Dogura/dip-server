@@ -21,7 +21,6 @@ export const login = (req,res)=>{
             httpOnly:true
         }).status(200).json(other)
     });
-    return (res.status(404).json("wrong imput"));
 
 
 };
