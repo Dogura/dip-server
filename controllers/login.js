@@ -30,7 +30,7 @@ export const loginPhone = (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
     db.query(q,[req.body.username],(err,data)=>{
-        console.log("data are " + data);
+        console.log("data are " + JSON.stringify(data));
         if(err){
             return (res.status(404).json("error data")  + err);
         }
