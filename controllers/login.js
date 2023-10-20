@@ -20,7 +20,9 @@ export const login = (req,res)=>{
         res.cookie("access_token",token,{
             httpOnly:true
         }).status(200).json(other)
+        return res.status(200).json(other)
     });
+    return (res.status(404).json("wrong imput"));
 
 
 };
