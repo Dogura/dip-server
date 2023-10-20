@@ -39,9 +39,10 @@ export const loginPhone = (req,res)=>{
         const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password)
         if(!isPassCorrect) return res.status(400).json("wrong username or password!")
 
-        
-        return res.status(200).json("logedIn");
-    });
+        const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+
+        res.json({ token });
+      });
 
 
 };
