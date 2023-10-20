@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const login = (req,res)=>{
-    console.log("login comming from phone" + JSON.stringify(req.body, null, 2));
+    console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
     db.query(q,[req.body.username],(err,data)=>{
         if(err){
