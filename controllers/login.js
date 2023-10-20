@@ -17,7 +17,7 @@ export const login = (req,res)=>{
 
         const {Password, ...other} = data[0] 
 
-        const token = jwt.sign({id:data[0].idusers},"jwtkey");
+        const token = jwt.sign({id:data[0].idusers},"hidennKey");
         res.cookie("access_token",token,{
             httpOnly:true
         }).status(200).json(other)
@@ -45,8 +45,8 @@ export const loginPhone = (req,res)=>{
             console.log("inncorect password");
             return res.status(400).json("wrong username or password!");
         };
-
-        const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+        const usName = data[0].userName
+        const token = jwt.sign({ usName }, "hidennKey", { expiresIn: '1h' });
         console.log("all done returning token");
         res.json({ token });
       });
