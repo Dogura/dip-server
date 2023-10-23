@@ -28,7 +28,6 @@ export const register = (req,res)=>{
                 }
                 else {
                     console.log("ez put in to database")
-                    const usName = data[0].userName
                     const token = jwt.sign("hello there", "hidennKey", { expiresIn: '1h' });
                     res.json({ token });
                     console.log("ending it ")
