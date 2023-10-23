@@ -15,7 +15,7 @@ export const register = (req,res)=>{
         }
         console.log("register in middle of 1stquery " +data.length )
         if (data.length !== 0) {
-            return res.status(400).json("UserName taken");
+            return res.status(409).json("UserName taken");
         }else {
             const pass = bcrypt.hashSync(req.body.password, 10);
             console.log("password hashed")
@@ -24,7 +24,7 @@ export const register = (req,res)=>{
             db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
                 if(err){
                     console.log("2nd error")
-                    return res.json(err)
+                    return res.status(422).json(err)
                 }
             else {
                 console.log("ez put in to database")

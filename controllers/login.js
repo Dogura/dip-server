@@ -33,17 +33,17 @@ export const loginPhone = (req,res)=>{
         console.log("data are " + JSON.stringify(data));
         if(err){
             console.log("mysql data error");
-            return (res.status(404).json("error data")  + err);
+            return (res.status(422).json("error data")  + err);
         };
         if (data.length === 0){ 
             console.log("mysql data not found");
-            return res.status(404).json("User not found!");
+            return res.status(406).json("User not found!");
         };
         
         const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
         if(!isPassCorrect) {
             console.log("inncorect password");
-            return res.status(400).json("wrong username or password!");
+            return res.status(406).json("wrong username or password!");
         };
         const usName = data[0].userName
         const token = jwt.sign({ usName }, "hidennKey", { expiresIn: '1h' });
