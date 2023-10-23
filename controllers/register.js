@@ -17,8 +17,8 @@ export const register = (req,res)=>{
         if (data.length !== 0) {
             return res.status(409).json("UserName taken");
         }else {
-            return res.status(200).json("succes");
-            /*
+           
+            
             const pass = bcrypt.hashSync(req.body.password, 10);
             console.log("password hashed")
 
@@ -30,12 +30,11 @@ export const register = (req,res)=>{
                 }
                 else {
                     console.log("ez put in to database")
-
                     return res.status(200).json("succes");
-                    console.log("ending it ")
+
                 };
             });
-            */
+            
         }
     });
 
