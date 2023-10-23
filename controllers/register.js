@@ -28,8 +28,8 @@ export const register = (req,res)=>{
                 }
                 else {
                     console.log("ez put in to database")
-                    const token = jwt.sign("hello there", "hidennKey", { expiresIn: '1h' });
-                    res.json({ token });
+
+                    res.status(200).json("succes");
                     console.log("ending it ")
                 };
             });
