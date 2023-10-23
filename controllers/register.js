@@ -28,7 +28,7 @@ export const register = (req,res)=>{
                 }
             else {
                 console.log("ez put in to database")
-                return res.status(200).json("registered");};
+                res.status(200).json("registered");};
             });
         }
     });
