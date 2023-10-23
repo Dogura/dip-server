@@ -28,10 +28,8 @@ export const register = (req,res)=>{
                 }
             else {
                 console.log("ez put in to database")
-                res.status(200).json("registered");};
+                return res.status(200).json("registered");};
             });
         }
     });
-
-    
 };
