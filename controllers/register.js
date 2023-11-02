@@ -16,8 +16,21 @@ export const register = async (req, res) => {
             console.log(data[0])
             return res.status(409).json("UserName taken");
         } else {
-            console.log("Success in database")
-            return res.json({"message":"test message"})
+            const pass = bcrypt.hashSync(req.body.password, 10);
+            console.log("password hashed")
+
+            const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?)"
+            db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
+                if(err){
+                    console.log("2nd error")
+                    return res.status(422).json(err)
+                }
+                else {
+                    console.log("ez put in to database")
+                    return res.json({"message":"success"});
+
+                };
+            });
         }
     } catch (err) {
         console.log("Error:", err);
