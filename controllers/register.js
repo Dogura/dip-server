@@ -4,39 +4,36 @@ import jwt from "jsonwebtoken";
 
 export  const register = async (req,res)=>{
 
+    const dbQuery = util.promisify(db.query);
     console.log("register from phone");
    
-    
-    const q = "SELECT * FROM users WHERE userName = ?"
-     await db.query(q,[req.body.username], async (err,data)=>{
-        if(err){
-            console.log("error 1st")
-            return res.json(err)
-        }
-        console.log("register in middle of 1stquery " +data.length )
+
+    const q = "SELECT * FROM users WHERE userName = ?";
+    try {
+        const data = await dbQuery(q, [req.body.username]);
+        console.log("register in the middle of 1st query " + data.length);
+
         if (data.length !== 0) {
             return res.status(409).json("UserName taken");
-        }else {
+        } else {
             const pass = bcrypt.hashSync(req.body.password, 10);
-            console.log("password hashed")
+            console.log("password hashed");
 
-            const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?)"
-            return  (await db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
-                if(err){
-                    console.log("2nd error")
-                    return res.status(422).json(err)
-                }
-                else {
-                    console.log("ez put in to database")
-                    return res.status(200).json("succes");
+            const ins = "INSERT INTO users (FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?";
 
-                };
-            }))
-            
-       
+            try {
+                await dbQuery(ins, [req.body.name, req.body.surrname, 0, pass, req.body.username]);
+                console.log("Data inserted into the database");
+                return res.status(200).json("success");
+            } catch (err) {
+                console.log("2nd error:", err);
+                return res.status(422).json(err);
+            }
         }
-        
-    });
+    } catch (err) {
+        console.log("1st error:", err);
+        return res.json(err);
+    }
 
     
 };
