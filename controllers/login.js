@@ -26,16 +26,15 @@ export const login = (req,res)=>{
 
 };
 
-export const loginPhone = (req,res)=>{
+export const loginPhone = async (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
-    db.query(q,[req.body.username],(err,data)=>{
-        console.log("data are " + JSON.stringify(data));
-        if(err){
-            console.log("mysql data error");
-            return (res.status(422).json("error data")  + err);
-        };
-        if (data.length === 0){ 
+    try {
+        const data = await db.query(q,[req.body.username])
+
+        console.log("data are " + data);
+
+        if (data[0] === undefined){ 
             console.log("mysql data not found");
             return res.status(406).json("User not found!");
         };
@@ -47,10 +46,11 @@ export const loginPhone = (req,res)=>{
         };
         console.log("all done returning token");
         res.json({ "message":"success" });
-      });
-
-
-};
+    }catch (err) {
+        console.log("Error:", err);
+        return res.status(500).json(err);
+    }
+}
 
 
 export const logout = (req,res)=>{
