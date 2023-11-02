@@ -26,13 +26,27 @@ export const login = (req,res)=>{
 
 };
 
+function logObject(obj, indent = '') {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object') {
+          console.log(indent + key + ':');
+          logObject(obj[key], indent + '  '); // Increase the indent
+        } else {
+          console.log(indent + key + ': ' + obj[key]);
+        }
+      }
+    }
+  }
+
 export const loginPhone = async (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
     try {
         const data = await db.query(q,[req.body.username])
 
-        console.log("Starting print out "+data)
+        console.log("Starting print out ")
+        logObject(data)
 
         if (data[0] === undefined){ 
             console.log("mysql data not found");
