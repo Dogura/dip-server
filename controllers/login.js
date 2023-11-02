@@ -26,30 +26,33 @@ export const login = (req,res)=>{
 
 };
 
-export const loginPhone = (req,res)=>{
+export const loginPhone = async(req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
-    db.query(q,[req.body.username],(err,data)=>{
+    try{
+        const data = await db.query(q,[req.body.username])
+
         console.log("data are " + JSON.stringify(data));
-        if(err){
-            console.log("mysql data error");
-            return (res.status(422).json("error data")  + err);
-        };
-        if (data.length === 0){ 
+
+        if (data[0] === undefined){ 
             console.log("mysql data not found");
             return res.status(406).json("User not found!");
         };
         
         const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
+        
         if(!isPassCorrect) {
             console.log("inncorect password");
             return res.status(406).json("wrong username or password!");
         };
-        const usName = data[0].userName
-        const token = jwt.sign({ usName }, "hidennKey", { expiresIn: '1h' });
         console.log("all done returning token");
-        res.json({ token });
-      });
+        res.json({ "message":"succes" });
+        
+
+    }catch (err) {
+        console.log("Error:", err);
+        return res.status(500).json(err);
+    }
 
 
 };
