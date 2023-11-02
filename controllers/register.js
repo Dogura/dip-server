@@ -8,7 +8,7 @@ export const register = async (req, res) => {
     const q = "SELECT * FROM users WHERE userName = ?";
 
     try {
-        const data = await db.query(q, [req.body.username]);
+        const data = await db.query(q, [req.body.username])
 
         console.log("register in middle of 1st query " + data.length);
 
