@@ -2,13 +2,13 @@ import {db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export  const register =  (req,res)=>{
+export  const register = async (req,res)=>{
 
     console.log("register from phone");
    
     
     const q = "SELECT * FROM users WHERE userName = ?"
-     db.query(q,[req.body.username], async (err,data)=>{
+     await db.query(q,[req.body.username], async (err,data)=>{
         if(err){
             console.log("error 1st")
             return res.json(err)
@@ -21,7 +21,7 @@ export  const register =  (req,res)=>{
             console.log("password hashed")
 
             const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?)"
-            return  db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
+            return  (await db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
                 if(err){
                     console.log("2nd error")
                     return res.status(422).json(err)
@@ -31,7 +31,7 @@ export  const register =  (req,res)=>{
                     return res.status(200).json("succes");
 
                 };
-            });
+            }))
             
        
         }
