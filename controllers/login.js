@@ -50,6 +50,7 @@ export const loginPhone = async(req,res)=>{
     } catch (err) {
         console.log("Error:", err);
         return res.status(500).json(err)
+    }
 
 };
 
