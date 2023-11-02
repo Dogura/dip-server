@@ -29,44 +29,50 @@ export const login = (req,res)=>{
 export const loginPhone = async (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
-    const data = await db.query(q,[req.body.username],(err,data)=>{
-        console.log("data are " + JSON.stringify(data));
-        if(err)
-            return "Error"
-        else
-            return data
-      });
-    if(data === "Error"){
-        console.log("mysql data error");
-        return (res.status(422).json("database error"));
+    try{
+        const data = await db.query(q,[req.body.username],(err,data)=>{
+            console.log("data are " + JSON.stringify(data));
+            if(err)
+                return "Error"
+            else
+                return data
+        });
+        if(data === "Error"){
+            console.log("mysql data error");
+            return (res.status(422).json("database error"));
+        }
+        if(data.length === 0){
+            console.log("mysql data not found");
+            return res.status(406).json("User not found!");
+        }
+        console.log("mysql data error "+data)
+        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
+        if(!isPassCorrect) {
+            console.log("inncorect password");
+            return res.status(406).json("wrong username or password!");
+        };
+        /*
+        if(err){
+            console.log("mysql data error");
+            return (res.status(422).json("error data")  + err);
+        };
+        if (data.length === 0){ 
+            console.log("mysql data not found");
+            return res.status(406).json("User not found!");
+        };
+        
+        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
+        if(!isPassCorrect) {
+            console.log("inncorect password");
+            return res.status(406).json("wrong username or password!");
+        };
+        console.log("all done returning token");
+        */
+        return res.json({ "message":"success" });
+    }catch(err) {
+        console.log("Error:", err);
+        return res.status(500).json(err);
     }
-    if(data.length === 0){
-        console.log("mysql data not found");
-        return res.status(406).json("User not found!");
-    }
-    const isPassCorrect = bcrypt.compareSync(req.body.password, data.Password);
-    if(!isPassCorrect) {
-        console.log("inncorect password");
-        return res.status(406).json("wrong username or password!");
-    };
-      /*
-    if(err){
-        console.log("mysql data error");
-        return (res.status(422).json("error data")  + err);
-    };
-    if (data.length === 0){ 
-        console.log("mysql data not found");
-        return res.status(406).json("User not found!");
-    };
-    
-    const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
-    if(!isPassCorrect) {
-        console.log("inncorect password");
-        return res.status(406).json("wrong username or password!");
-    };
-    console.log("all done returning token");
-    */
-    return res.json({ "message":"success" });
 
 };
 
