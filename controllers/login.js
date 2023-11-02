@@ -1,6 +1,7 @@
 import {db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import util from "util";
 
 const dbQuery = util.promisify(db.query);
 
