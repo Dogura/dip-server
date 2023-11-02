@@ -1,6 +1,7 @@
 import {db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { jsonc } from 'jsonc';
 
 export const login = (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
@@ -33,7 +34,7 @@ export const loginPhone = async (req,res)=>{
     try {
         const data = await db.query(q,[req.body.username])
 
-        console.log("Starting print out "+JSON.stringify(data))
+        console.log("Starting print out "+jsonc.stringify(data))
 
         if (data[0] === undefined){ 
             console.log("mysql data not found");
