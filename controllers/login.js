@@ -31,7 +31,10 @@ export const loginPhone = async (req,res)=>{
     const q = "SELECT * FROM users WHERE userName = ?"
     const data = await db.query(q,[req.body.username],(err,data)=>{
         console.log("data are " + JSON.stringify(data));
-        return data
+        if(err)
+            return err
+        else
+            return data
       });
       /*
     if(err){
