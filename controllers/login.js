@@ -1,9 +1,7 @@
 import {db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import util from "util";
 
-const dbQuery = util.promisify(db.query);
 
 export const login = (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
@@ -32,30 +30,30 @@ export const login = (req,res)=>{
 export const loginPhone = async (req,res)=>{
     console.log("login comming from phone" + JSON.stringify(req.body));
     const q = "SELECT * FROM users WHERE userName = ?"
-    try{
-        const data = await dbQuery(q,[req.body.username],(err,data)=>{
-            console.log("data are " + JSON.stringify(data));
-            if(err)
-                return "Error"
-            else
-                return data
+    try {
+        const data = await new Promise((resolve, reject) => {
+            db.query(q, [req.body.username], (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
         });
-        if(data === "Error"){
-            console.log("mysql data error");
-            return (res.status(422).json("database error"));
-        }
-        if(data.length === 0){
+
+        if (data.length === 0) {
             console.log("mysql data not found");
             return res.status(406).json("User not found!");
         }
-        console.log("mysql data error "+JSON.stringify(data))
+
         const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
-        if(!isPassCorrect) {
-            console.log("inncorect password");
-            return res.status(406).json("wrong username or password!");
-        };
-        return res.json({ "message":"success" });
-    }catch(err) {
+        if (!isPassCorrect) {
+            console.log("incorrect password");
+            return res.status(406).json("Wrong username or password!");
+        }
+
+        return res.json({ "message": "success" });
+    } catch (err) {
         console.log("Error:", err);
         return res.status(500).json(err);
     }
