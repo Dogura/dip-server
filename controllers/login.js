@@ -32,10 +32,23 @@ export const loginPhone = async (req,res)=>{
     const data = await db.query(q,[req.body.username],(err,data)=>{
         console.log("data are " + JSON.stringify(data));
         if(err)
-            return err
+            return "Error"
         else
             return data
       });
+    if(data === "Error"){
+        console.log("mysql data error");
+        return (res.status(422).json("database error"));
+    }
+    if(data.length === 0){
+        console.log("mysql data not found");
+        return res.status(406).json("User not found!");
+    }
+    const isPassCorrect = bcrypt.compareSync(req.body.password, data.Password);
+    if(!isPassCorrect) {
+        console.log("inncorect password");
+        return res.status(406).json("wrong username or password!");
+    };
       /*
     if(err){
         console.log("mysql data error");
@@ -53,7 +66,7 @@ export const loginPhone = async (req,res)=>{
     };
     console.log("all done returning token");
     */
-    res.json({ "message":"success" });
+    return res.json({ "message":"success" });
 
 };
 
