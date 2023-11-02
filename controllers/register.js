@@ -17,7 +17,7 @@ export const register = async (req, res) => {
             return res.status(409).json("UserName taken");
         } else {
             console.log("Success in database")
-            return res.status(409).json("Test Error");
+            return res.json({"message":"test message"})
         }
     } catch (err) {
         console.log("Error:", err);
