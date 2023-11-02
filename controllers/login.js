@@ -47,7 +47,7 @@ export const loginPhone = async (req,res)=>{
             console.log("mysql data not found");
             return res.status(406).json("User not found!");
         }
-        console.log("mysql data error "+data)
+        console.log("mysql data error "+JSON.stringify(data))
         const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
         if(!isPassCorrect) {
             console.log("inncorect password");
