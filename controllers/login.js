@@ -32,7 +32,12 @@ export const loginPhone = async (req,res)=>{
     try {
         const data = await db.query(q,[req.body.username])
 
-        console.log("data are " + data.Password);
+        console.log("Starting print out ")
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                console.log(key + ": " + data[key]);
+            }
+        }
 
         if (data[0] === undefined){ 
             console.log("mysql data not found");
