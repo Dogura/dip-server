@@ -2,13 +2,13 @@ import {db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export const register = (req,res)=>{
+export  const register = async (req,res)=>{
 
     console.log("register from phone");
    
     
     const q = "SELECT * FROM users WHERE userName = ?"
-    db.query(q,[req.body.username],(err,data)=>{
+    await db.query(q,[req.body.username], async (err,data)=>{
         if(err){
             console.log("error 1st")
             return res.json(err)
@@ -17,13 +17,11 @@ export const register = (req,res)=>{
         if (data.length !== 0) {
             return res.status(409).json("UserName taken");
         }else {
-           
-            
             const pass = bcrypt.hashSync(req.body.password, 10);
             console.log("password hashed")
 
             const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?)"
-            db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
+            return await db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
                 if(err){
                     console.log("2nd error")
                     return res.status(422).json(err)
@@ -35,7 +33,9 @@ export const register = (req,res)=>{
                 };
             });
             
+       
         }
+        
     });
 
     
