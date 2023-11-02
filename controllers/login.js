@@ -32,7 +32,7 @@ export const loginPhone = async (req,res)=>{
     try {
         const data = await db.query(q,[req.body.username])
 
-        console.log("data are " + data.body);
+        console.log("data are " + JSON.stringify(data));
 
         if (data[0] === undefined){ 
             console.log("mysql data not found");
