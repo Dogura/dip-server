@@ -13,6 +13,7 @@ export const register = async (req, res) => {
         console.log("register in middle of 1st query " + data.length);
 
         if (data.length !== 0) {
+            console.log(data)
             return res.status(409).json("UserName taken");
         } else {
             return res.status(200).json("success");
