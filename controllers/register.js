@@ -17,12 +17,11 @@ export const register = async (req, res) => {
             return res.status(409).json("UserName taken");
         } else {
             console.log("Success in database")
-            return res.status(200).json("success");
+            return res.status(409).json("Test Error");
         }
     } catch (err) {
         console.log("Error:", err);
         return res.status(500).json(err);
     }
 
-    console.log("somehow im out")
 };
