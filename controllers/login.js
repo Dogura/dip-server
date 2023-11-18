@@ -52,7 +52,7 @@ export const loginPhone = async (req,res)=>{
             return res.status(406).json("Wrong username or password!");
         }
 
-        return res.json({ "message": "success" });
+        return res.json(data);
     } catch (err) {
         console.log("Error:", err);
         return res.status(500).json(err);
