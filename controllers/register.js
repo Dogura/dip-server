@@ -26,8 +26,8 @@ export const register = async (req, res) => {
             const pass = bcrypt.hashSync(req.body.password, 10);
             console.log("password hashed")
 
-            const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName) VALUES (?, ?, ?, ?, ?)"
-            db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username],(err,data)=>{
+            const ins = "INSERT INTO users ( FirstName, Surname, Privileges, Password, userName, Key) VALUES (?, ?, ?, ?, ?,?)"
+            db.query(ins,[req.body.name,req.body.surrname,0,pass,req.body.username,req.body.key],(err,data)=>{
                 if(err){
                     console.log("2nd error")
                     return res.status(422).json(err)
