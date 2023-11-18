@@ -51,7 +51,7 @@ export const loginPhone = async (req,res)=>{
             return res.status(406).json("Wrong username or password!");
         }
 
-        return res.json({data});
+        return res.json(data[0]);
     } catch (err) {
         console.log("Error:", err);
         return res.status(500).json(err);
