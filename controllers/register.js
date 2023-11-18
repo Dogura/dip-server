@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-    console.log("register from phone");
+    console.log("register from phone"+req.body);
 
     const q = "SELECT * FROM users WHERE userName = ?";
 
