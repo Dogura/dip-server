@@ -23,7 +23,7 @@ export const addRoom = async (req,res)=>{
 
         if (data[0] !== undefined) {
             console.log(data[0])
-            return res.status(404).json("UserName taken");
+            return res.status(404).json("Room name taken");
         } else {
             const q = "INSERT INTO rooms (name, idowner, key_val) VALUES (?, ?, ?);"
             db.query(q,[req.body.roomName,req.body.id,req.body.key_val],(err,data)=>{
