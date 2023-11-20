@@ -2,18 +2,47 @@ import {db} from "../db.js";
 
 
 
-export const addRoom =(req,res)=>{
+
+
+
+export const addRoom = async (req,res)=>{
     console.log("addRoom from phone"+JSON.stringify(req.body));
 
-    const q = "INSERT INTO rooms (name, idowner, key_val) VALUES (?, ?, ?);"
-    db.query(q,[req.body.roomName,req.body.id,req.body.key_val],(err,data)=>{
-        if(err){
-            console.log("It is error"+ err)
-            return res.status(405)
+    const q = "SELECT * FROM rooms WHERE name = ?";
+    
+    try {
+        const data = await new Promise((resolve, reject) =>{
+        db.query(q,[req.body.roomName],(err,data)=>{
+            if(err){
+                console.log("It is error"+ err)
+                reject(err);
+            }
+            //console.log(data)
+            resolve(data);
+        });})
+
+        if (data[0] !== undefined) {
+            console.log(data[0])
+            return res.status(404).json("UserName taken");
+        } else {
+            const q = "INSERT INTO rooms (name, idowner, key_val) VALUES (?, ?, ?);"
+            db.query(q,[req.body.roomName,req.body.id,req.body.key_val],(err,data)=>{
+                if(err){
+                    console.log("It is error"+ err)
+                    return res.status(405).json(err)
+                }else{
+                    return res.json({"message":"success"});
+                }
+            });
+        
         }
-        //console.log(data)
-        return res.json({"status":"succes"});
-    });
+
+
+    }
+    catch(err){
+        console.log("Error:", err);
+        return res.status(405).json(err);
+    }
 
 }
 
