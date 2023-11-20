@@ -1,6 +1,27 @@
 import {db} from "../db.js";
 
 
+
+export const addRoom =(req,res)=>{
+    console.log("addRoom from phone"+JSON.stringify(req.body));
+
+    const q = "INSERT INTO rooms (name, idowner, key_val) VALUES (?, ?, ?);"
+    db.query(q,[req.body.roomName,req.body.id,req.body.key_val],(err,data)=>{
+        if(err){
+            console.log("It is error"+ err)
+            return res.status(405)
+        }
+        //console.log(data)
+        return res.json({"status":"succes"});
+    });
+
+}
+
+export const deleteRoom =(req,res)=>{
+    console.log("removeRoom from phone"+JSON.stringify(req.body));
+    
+}
+
 export const getRooms = (req,res)=>{
     const q = "SELECT * FROM rooms WHERE idowner = ?"
     db.query(q,[req.body.idusers],(err,data)=>{
@@ -93,4 +114,5 @@ export const unmute = (req,res)=>{
             });
         }
     }
+
 
