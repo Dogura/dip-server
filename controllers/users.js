@@ -25,6 +25,7 @@ export const getUsers = async (req,res)=>{
     }).catch((error) => {
         console.error(error);
     });
+    return res.status(500)
 };
 
 export const setUsers = async (req,res)=>{
@@ -41,6 +42,6 @@ export const setUsers = async (req,res)=>{
       return res.status(500).json(error)
     });
 
-
+return res.status(500)
 
 };
