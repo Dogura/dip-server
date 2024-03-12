@@ -1,32 +1,46 @@
-import {db} from "../db.js"
+import {database, db} from "../db.js"
+import { getDatabase, ref, child, get, set } from "firebase/database";
 
 export const getUsers = (req,res)=>{
-    console.log("wrawrwdawdawdawdaw");
-    const q = "SELECT * FROM users WHERE Privileges <= ? AND idusers != ?"
-    db.query(q,[req.body.Privileges, req.body.idusers],(err,data)=>{
-        if(err){
-            //console.log("It is error")
-            return res.json(err)
+    var priv = req.body.priviledges
+    var id = req.body.key
+    var list =[]
+    const dbRef = ref(database)
+
+    get(child(dbRef,"Groupchat/Users")).then((snapshot) => {    
+        if (snapshot.exists()) {
+            snapshot.forEach(element => {
+            if((id != element.val().key) && (priv >= element.val().priviledges) ){
+                list.push(element.val())
+            }
+            });
+            console.log(list.length)
+
+            return res.status(200).json(list)
+        } 
+        else {
+            console.log("No data available");
+            return res.status(401).json("No data")
         }
-        //console.log(data.length)
-        if (data.length === 0) {
-            return res.status(404).json("User not found!");}
-        //console.log(data)
-        return res.status(200).json(data)
+    }).catch((error) => {
+        console.error(error);
     });
-
-
 };
 
 export const setUsers = (req,res)=>{
-    const q = "UPDATE users set Privileges = ? WHERE idusers = ?"
-    db.query(q,[req.body.priv, req.body.id],(err,data)=>{
-        if(err){
-            return res.json(err)
-        }
-        if (data.length === 0) return res.status(404).json("User not found!");
-        return res.status(200).json("Success");
+    var priv = req.body.priv
+    var id = req.body.id
+    const dbRef = database
+    set(ref(database,'Groupchat/Users/'+id+'/priviledges'),priv)
+    .then(() => {
+      console.log('Value set successfully');
+      return res.status(200)
+    })
+    .catch((error) => {
+      console.error('Error setting value:', error);
+      return res.status(500).json(error)
     });
+
 
 
 };

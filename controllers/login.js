@@ -1,63 +1,47 @@
-import {db} from "../db.js"
+import {database, db} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 
 export const login = (req,res)=>{
-    const q = "SELECT * FROM users WHERE userName = ?"
-    db.query(q,[req.body.username],(err,data)=>{
-        console.log("data are " + data);
-        if(err){
-            return (res.status(404).json("error data")  + err);
+
+    //console.log("im in login" +req.body.username);
+    const dbRef = ref(database)
+    get(child(dbRef,"Groupchat/Users")).then((snapshot) => {
+    if (snapshot.exists()) {
+       // console.log(snapshot.val());
+       snapshot.forEach(element => {
+        if(req.body.username == element.val().usserName){
+            bcrypt.compare(req.body.password,element.val().password, (err,result) =>{
+                if (err) {
+                  //  console.error('Error comparing passwords:', err);
+                    return res.status(500).json("Error validace");
+                  } else if (result) {
+                   // console.log('Passwords match!'); // Authentication successful
+                    return res.json({element});
+                  } else {
+                    //console.log('Passwords do not match.'); // Authentication failed
+                    return res.status(401).json("Špatné jméno/heslo");
+                  }
+            })
+
         }
-        if (data.length === 0) return res.status(404).json("User not found!");
-        
-        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password)
-        if(!isPassCorrect) return res.status(400).json("wrong username or password!")
+        //console.log("person "+element.val().name);
+       });
 
-        const {Password, ...other} = data[0] 
 
-        const token = jwt.sign({id:data[0].idusers},"hidennKey");
-        res.cookie("access_token",token,{
-            httpOnly:true
-        }).status(200).json(other)
+    } else {
+        console.log("No data available");
+    }
+    }).catch((error) => {
+    console.error(error);
     });
 
 
 };
 
-export const loginPhone = async (req,res)=>{
-    console.log("login comming from phone" + JSON.stringify(req.body));
-    const q = "SELECT * FROM users WHERE userName = ?"
-    try {
-        const data = await new Promise((resolve, reject) => {
-            db.query(q, [req.body.username], (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-        });
 
-        if (data.length === 0) {
-            console.log("mysql data not found");
-            return res.status(406).json("User not found!");
-        }
-
-        const isPassCorrect = bcrypt.compareSync(req.body.password, data[0].Password);
-        if (!isPassCorrect) {
-            console.log("incorrect password");
-            return res.status(406).json("Wrong username or password!");
-        }
-
-        return res.json(data[0]);
-    } catch (err) {
-        console.log("Error:", err);
-        return res.status(500).json(err);
-    }
-
-};
 
 
 export const logout = (req,res)=>{
