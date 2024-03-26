@@ -29,27 +29,18 @@ export const getUsers = async (req,res)=>{
 };
 
 export const setUsers = async (req,res)=>{
-    var priv = req.body.priv
-    var id = req.body.id
-    const dbRef = database
-    console.log("going into set")
-    var succes =await set(ref(database,'Groupchat/Users/'+id+'/priviledges'),priv)
-    .then(() => {
-      console.log('Value set successfully');
-      return true
-      //
-    })
-    .catch((error) => {
-      console.error('Error setting value:', error);
-      return false
-      //return res.status(500).json(error)
-    });
-    console.log("in out of set")
-    if(succes){
-        return res.status(200)
-    }
-    else{
-        return res.status(500)
+    try {
+        const priv = req.body.priv;
+        const id = req.body.id;
+
+        console.log("Going into set");
+        await set(ref(database, 'Groupchat/Users/' + id + '/priviledges'), priv);
+
+        console.log("Value set successfully");
+        return res.status(200).send("Value set successfully");
+    } catch (error) {
+        console.error('Error setting value:', error);
+        return res.status(500).send("Error setting value: " + error);
     }
 
 };
