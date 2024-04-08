@@ -29,11 +29,12 @@ export const getUsers = async (req,res)=>{
 };
 
 export const setUsers = async (req,res)=>{
+    console.log("Going into set1 ");
     try {
         const priv = req.body.priv;
         const id = req.body.id;
 
-        console.log("Going into set");
+        console.log("Going into set2");
         await set(ref(database, 'Groupchat/Users/' + id + '/priviledges'), priv);
 
         console.log("Value set successfully");
