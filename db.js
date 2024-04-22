@@ -20,14 +20,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 signInAnonymously(auth)
   .then(() => {
-    // Signed in..
+    console.log("Sign in ok")
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+    console.log(errorMessage)
     // ...
   });
-console.log(app)
+//console.log(app)
 
 
 
