@@ -1,6 +1,7 @@
-import {database, db} from "../db.js"
+import {database} from "../db.js"
 import bcrypt from "bcryptjs";
 import { getDatabase, ref, child, get, set } from "firebase/database";
+
 
 export const getUsers = async (req,res)=>{
     var priv = req.body.priviledges
@@ -20,8 +21,8 @@ export const getUsers = async (req,res)=>{
             return res.status(200).json(list)
         } 
         else {
-            console.log("No data available");
-            return res.status(401).json("No data")
+            console.log("Data nenalezena");
+            return res.status(404).json("No data")
         }
     }).catch((error) => {
         console.error(error);
@@ -39,10 +40,10 @@ export const setUsers = async (req,res)=>{
         await set(ref(database, 'Groupchat/Users/' + id + '/priviledges'), priv);
 
         console.log("Value set successfully");
-        return res.status(200).send("Value set successfully");
+        return res.status(200).send("Hodnota úspěšně změněna");
     } catch (error) {
         console.error('Error setting value:', error);
-        return res.status(500).send("Error setting value: " + error);
+        return res.status(500).send("Chyba: " + error);
     }
 
 };
@@ -63,10 +64,10 @@ export const resetPass = async (req,res)=>{
         await set(ref(database, 'Groupchat/Users/' + id + '/password'), hh);
 
         console.log("Value set successfully");
-        return res.status(200).send("Value set successfully");
+        return res.status(200).send("Heslo zresetováno");
     } catch (error) {
         console.error('Error setting value:', error);
-        return res.status(500).send("Error setting value: " + error);
+        return res.status(500).send("Chyba: " + error);
     }
 
 };

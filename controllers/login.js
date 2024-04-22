@@ -1,10 +1,11 @@
-import {database, db} from "../db.js"
+import {database} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getDatabase, ref, child, get } from "firebase/database";
 
 
-export const login = (req,res)=>{
+export  const login = async (req,res)=>{
+
 
     //console.log("im in login" +req.body.username);
     const dbRef = ref(database)

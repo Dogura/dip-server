@@ -1,6 +1,7 @@
-import {db} from "../db.js"
+/*
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 
 export const register = async (req, res) => {
     console.log("register from phone"+JSON.stringify(req.body));
@@ -45,3 +46,4 @@ export const register = async (req, res) => {
     }
 
 };
+*/

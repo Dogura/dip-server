@@ -1,3 +1,4 @@
+/*
 import  express  from "express";
 import {addRoom, getRooms, getRoomUsers, unmute, mute, kick } from "../controllers/rooms.js";
 const router = express.Router()
@@ -10,3 +11,4 @@ router.post("/mute",mute)
 router.post("/kick",kick)
 
 export default router
+*/
