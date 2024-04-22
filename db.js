@@ -2,6 +2,8 @@ import mysql from "mysql";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import { getDatabase } from "firebase/database";
+import fetch from 'node-fetch';
+globalThis.fetch = fetch;
 
 
 
