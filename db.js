@@ -3,16 +3,21 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import { getDatabase } from "firebase/database";
 import fetch from 'node-fetch';
+
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 globalThis.fetch = fetch;
 
 
-
-
-
-
+/*
+API_KEY = "AIzaSyCM38Ll6dtvs07ZaVGqZvWAdgCuJXT37Ds",
+DATABASE_URL = "https://dip-chating-app-default-rtdb.europe-west1.firebasedatabase.app/"
+*/
 const firebaseConfig = {
-   apiKey:"AIzaSyCM38Ll6dtvs07ZaVGqZvWAdgCuJXT37Ds",
-    databaseURL: "https://dip-chating-app-default-rtdb.europe-west1.firebasedatabase.app/",
+    apiKey: process.env.API_KEY,
+    databaseURL: process.env.DATABASE_URL,
   };
 
   
@@ -31,7 +36,7 @@ await signInAnonymously(auth)
     console.log(errorMessage)
     // ...
   });
-//console.log(app)
+console.log()
 
 
 

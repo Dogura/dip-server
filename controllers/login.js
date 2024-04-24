@@ -9,6 +9,7 @@ export  const login = async (req,res)=>{
 
     //console.log("im in login" +req.body.username);
     const dbRef = ref(database)
+    console.log(req.body)
     get(child(dbRef,"Groupchat/Users")).then((snapshot) => {
     if (snapshot.exists()) {
        // console.log(snapshot.val());

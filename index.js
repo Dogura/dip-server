@@ -6,14 +6,33 @@ import usersRoutes from "./routes/users.js";
 //import registerRoutes from "./routes/register.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const app = express()
+//require('dotenv').config();
+
+
 
 
 
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
+
+app.use((req, res, next) => {
+    console.log(req.headers['x_api_key'])
+    console.log(process.env.API_TOKEN)
+    const token = req.headers['x_api_key'];
+    if (token && token === process.env.API_TOKEN) {
+        next();
+    } else {
+        console.log("fail")
+        return;
+    }
+});
 app.use("/server/home", homeRoutes)
 //app.use("/server/register", registerRoutes)
 app.use("/server/login", loginRoutes)
