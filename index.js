@@ -26,11 +26,12 @@ app.use((req, res, next) => {
     console.log(req.headers['x_api_key'])
     console.log(process.env.API_TOKEN)
     const token = req.headers['x_api_key'];
-    if (token && token === process.env.API_TOKEN) {
+    if (token == process.env.API_TOKEN) {
         next();
     } else {
+        console.log(headers)
         console.log("fail")
-        return;
+        return res.status(401);
     }
 });
 app.use("/server/home", homeRoutes)
