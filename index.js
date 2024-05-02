@@ -23,8 +23,8 @@ app.use(cors())
 app.use(cookieParser())
 
 app.use((req, res, next) => {
-    console.log(req.headers['x_api_key'])
-    console.log(process.env.API_TOKEN)
+ //   console.log(req.headers['x_api_key'])
+   // console.log(process.env.API_TOKEN)
     const token = req.headers['x_api_key'];
     if (token == process.env.API_TOKEN) {
         next();

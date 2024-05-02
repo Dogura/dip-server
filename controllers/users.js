@@ -49,7 +49,7 @@ export const setUsers = async (req,res)=>{
 };
 export const resetPass = async (req,res)=>{
     const saltRounds = 10; // You can adjust the number of salt rounds as needed
-    const plaintextPassword = 'Heslo123';
+    const plaintextPassword = req.body.pass;
     console.log("Going into reset ");
     var hh;
     hh = await bcrypt.hash(plaintextPassword, saltRounds);
