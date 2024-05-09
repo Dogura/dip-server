@@ -1,9 +1,19 @@
-import {database} from "../db.js"
+import {appAuth} from "../db.js"
 import bcrypt from "bcryptjs";
 import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getAuth, signInAnonymously } from 'firebase/auth';
+
+
+
 
 
 export const getUsers = async (req,res)=>{
+    const database = getDatabase(appAuth)
+    const currentUser = getAuth(appAuth).currentUser;
+    if(!currentUser){
+        return res.status(403).json("Vypršelo přihlášení")
+    }
+
     var priv = req.body.priviledges
     var id = req.body.key
     var list =[]
@@ -31,6 +41,12 @@ export const getUsers = async (req,res)=>{
 };
 
 export const setUsers = async (req,res)=>{
+    const database = getDatabase(appAuth)
+    const currentUser = getAuth(appAuth).currentUser;
+    if(!currentUser){
+        return res.status(403).json("Vypršelo přihlášení")
+    }
+
     console.log("Going into set1 ");
     try {
         const priv = req.body.priv;
@@ -48,6 +64,12 @@ export const setUsers = async (req,res)=>{
 
 };
 export const resetPass = async (req,res)=>{
+    const database = getDatabase(appAuth)
+    const currentUser = getAuth(appAuth).currentUser;
+    if(!currentUser){
+        return res.status(403).json("Vypršelo přihlášení")
+    }
+
     const saltRounds = 10; // You can adjust the number of salt rounds as needed
     const plaintextPassword = req.body.pass;
     console.log("Going into reset ");

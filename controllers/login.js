@@ -1,11 +1,29 @@
-import {database} from "../db.js"
+import {appAuth} from "../db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { getAuth, signInAnonymously } from 'firebase/auth';
+
 import { getDatabase, ref, child, get } from "firebase/database";
 
 
 export  const login = async (req,res)=>{
+    const database = getDatabase(appAuth)
 
+    const auth = getAuth(appAuth);
+    const currentUser = getAuth(appAuth).currentUser;
+    if(!currentUser){
+      await signInAnonymously(auth)
+      .then(() => {
+        console.log("Sign in ok")
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
+        // ...
+      });
+    }
 
     //console.log("im in login" +req.body.username);
     const dbRef = ref(database)
