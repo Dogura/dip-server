@@ -6,11 +6,18 @@ import { getAuth, signInAnonymously } from 'firebase/auth';
 import { getDatabase, ref, child, get } from "firebase/database";
 
 
+/**
+ * Handles user login.
+ * 
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 export  const login = async (req,res)=>{
     const database = getDatabase(appAuth)
 
     const auth = getAuth(appAuth);
     const currentUser = getAuth(appAuth).currentUser;
+    // If no current user, sign in anonymously
     if(!currentUser){
       await signInAnonymously(auth)
       .then(() => {
@@ -25,29 +32,30 @@ export  const login = async (req,res)=>{
       });
     }
 
-    //console.log("im in login" +req.body.username);
+    // Reference to the Firebase database
     const dbRef = ref(database)
     console.log(req.body)
+
+    // Retrieve data from Firebase database
     get(child(dbRef,"Groupchat/Users")).then((snapshot) => {
     if (snapshot.exists()) {
-       // console.log(snapshot.val());
+
        snapshot.forEach(element => {
         if(req.body.username == element.val().usserName){
             bcrypt.compare(req.body.password,element.val().password, (err,result) =>{
                 if (err) {
-                  //  console.error('Error comparing passwords:', err);
+
                     return res.status(500).json("Error validace");
                   } else if (result) {
-                   // console.log('Passwords match!'); // Authentication successful
+
                     return res.json({element});
                   } else {
-                    //console.log('Passwords do not match.'); // Authentication failed
+
                     return res.status(401).json("Špatné jméno/heslo");
                   }
             })
 
         }
-        //console.log("person "+element.val().name);
        });
 
 
@@ -62,9 +70,14 @@ export  const login = async (req,res)=>{
 };
 
 
-
-
+/**
+ * Handles user logout.
+ * 
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 export const logout = (req,res)=>{
+  // Clear access token cookie
     res.clearCookie("access_token",{
         sameSite: "none",
         secure:true

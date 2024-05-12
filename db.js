@@ -6,15 +6,13 @@ import fetch from 'node-fetch';
 
 import dotenv from 'dotenv';
 
+// Load environment variables from .env file
 dotenv.config();
 
+// Polyfill for fetch in Node.js environment
 globalThis.fetch = fetch;
 
-
-/*
-API_KEY = "AIzaSyCM38Ll6dtvs07ZaVGqZvWAdgCuJXT37Ds",
-DATABASE_URL = "https://dip-chating-app-default-rtdb.europe-west1.firebasedatabase.app/"
-*/
+// Firebase configuration object
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     databaseURL: process.env.DATABASE_URL,
@@ -22,11 +20,10 @@ const firebaseConfig = {
 
   
 
-
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
 console.log()
 
 
-
-// Initialize Realtime Database and get a reference to the service
+// Exporting the initialized Firebase app for authentication
 export const appAuth = app;
