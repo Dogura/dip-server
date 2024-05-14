@@ -30,14 +30,23 @@ export const getUsers = async (req,res)=>{
 
     // Retrieve data from Firebase database
     await get(child(dbRef,"Groupchat/Users")).then((snapshot) => {    
+        var top = null
         if (snapshot.exists()) {
             snapshot.forEach(element => {
             if((id != element.val().key) && (priv >= element.val().priviledges) ){
                 list.push(element.val())
+  
+            }
+            if(id == element.val().key){
+                top = element.val()
             }
             });
             console.log(list.length)
-
+            list.sort((a,b)=>b.priviledges-a.priviledges)
+            if(top){
+                list.splice(0,0,top)
+                console.log(top)
+            }
             return res.status(200).json(list)
         } 
         else {
